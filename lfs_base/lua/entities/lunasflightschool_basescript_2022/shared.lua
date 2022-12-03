@@ -1,7 +1,7 @@
 ENT.Type            = "anim"
 DEFINE_BASECLASS( "lunasflightschool_basescript" )
 
-ENT.PrintName = "LFS 2022"
+ENT.PrintName = "testscript LFS 2022"
 ENT.Author = "Luna"
 ENT.Information = "LFS 2022 Prototype"
 ENT.Category = "[LFS]"
@@ -40,7 +40,7 @@ function ENT:GetThrottlePercent()
 	return math.max(math.Round( self:GetThrottle() * 100,0),0)
 end
 
-function ENT:CalcSteer( ply, cmd )
+function ENT:MouseDirectInput( ply, cmd )
 	local Delta = FrameTime()
 
 	local KeyLeft = cmd:KeyDown( IN_MOVERIGHT )
@@ -85,7 +85,7 @@ end
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
-	self:CalcSteer( ply, cmd )
+	self:MouseDirectInput( ply, cmd )
 	self:CalcThrottle( ply, cmd )
 end
 
