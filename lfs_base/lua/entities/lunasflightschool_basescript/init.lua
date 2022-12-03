@@ -46,7 +46,7 @@ function ENT:Initialize()
 
 	self:InitPod()
 	self:InitWheels()
-	self:RunOnSpawn()
+	self:RunOnSpawn( PObj )
 	self:AutoAI()
 end
 
@@ -105,7 +105,7 @@ function ENT:HandleMaintenance()
 	end
 end
 
-function ENT:RunOnSpawn()
+function ENT:RunOnSpawn( PObj )
 end
 
 function ENT:CanSound()
@@ -1200,9 +1200,9 @@ function ENT:InitWheels()
 	self:PhysWake() 
 end
 
-function ENT:InitPod()
+function ENT:InitPod( Pos, Ang )
 	if IsValid( self:GetDriverSeat() ) then return end
-	
+
 	local Pod = ents.Create( "prop_vehicle_prisoner_pod" )
 	
 	if not IsValid( Pod ) then
@@ -1213,15 +1213,18 @@ function ENT:InitPod()
 		return
 	else
 		self:SetDriverSeat( Pod )
-		
+
 		local DSPhys = Pod:GetPhysicsObject()
-		
+
+		if not Pos then Pos = self.SeatPos end
+		if not Ang then Ang = self.SeatAng end
+
 		Pod:SetMoveType( MOVETYPE_NONE )
 		Pod:SetModel( "models/nova/airboat_seat.mdl" )
 		Pod:SetKeyValue( "vehiclescript","scripts/vehicles/prisoner_pod.txt" )
 		Pod:SetKeyValue( "limitview", 0 )
-		Pod:SetPos( self:LocalToWorld( self.SeatPos ) )
-		Pod:SetAngles( self:LocalToWorldAngles( self.SeatAng ) )
+		Pod:SetPos( self:LocalToWorld( Pos ) )
+		Pod:SetAngles( self:LocalToWorldAngles( Ang ) )
 		Pod:SetOwner( self )
 		Pod:Spawn()
 		Pod:Activate()
