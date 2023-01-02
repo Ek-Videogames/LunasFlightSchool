@@ -168,6 +168,10 @@ hook.Add( "OnEntityCreated", "!!!!lfsEntitySorter", function( ent )
 				simfphys.LFS:FixVelocity()
 			end
 		end
+
+		if ent.LVS then 
+			table.insert( simfphys.LFS.PlanesStored, ent )
+		end
 	end )
 end )
 
@@ -1017,15 +1021,6 @@ if CLIENT then
 			surface.SetDrawColor( 200, 200, 255, 255 )
 			simfphys.LFS.DrawDiamond( X + 1, Y + 1, 24, target_ent:GetShield() / target_ent:GetMaxShield() )
 		end
-
-		--[[ old style
-		local Size = 60
-		
-		surface.DrawLine( X - Size, Y + Size, X + Size, Y + Size )
-		surface.DrawLine( X - Size, Y - Size, X - Size, Y + Size )
-		surface.DrawLine( X + Size, Y - Size, X + Size, Y + Size )
-		surface.DrawLine( X - Size, Y - Size, X + Size, Y - Size )
-		]]
 	end
 
 	local function PaintPlaneHud( ent, X, Y, ply )
@@ -1158,37 +1153,33 @@ if CLIENT then
 		local MyTeam = ent:GetAITEAM()
 
 		for _, v in pairs( AllPlanes ) do
-			if IsValid( v ) then
-				if v ~= ent then
-					if isvector( v.SeatPos ) then
-						local rPos = v:LocalToWorld( v.SeatPos )
+			if not IsValid( v ) or v == ent then continue end
 
-						local Pos = rPos:ToScreen()
-						local Dist = (MyPos - rPos):Length()
+			local rPos = v:LocalToWorld( v:OBBCenter() )
 
-						if Dist < 10000 then
-							if not util.TraceLine( {start = ent:GetRotorPos(),endpos = rPos,mask = MASK_NPCWORLDSTATIC,} ).Hit then
+			local Pos = rPos:ToScreen()
+			local Dist = (MyPos - rPos):Length()
 
-								local Alpha = 255 * (1 - (Dist / 10000) ^ 2)
-								local Team = v:GetAITEAM()
-								local IndicatorColor = Color( 255, 0, 0, Alpha )
+			if Dist < 10000 then
+				if not util.TraceLine( {start = ent:GetRotorPos(),endpos = rPos,mask = MASK_NPCWORLDSTATIC,} ).Hit then
 
-								if Team == 0 then
-									IndicatorColor = Color( 0, 255, 0, Alpha )
-								else
-									if Team == 1 or Team == 2 then
-										if Team ~= MyTeam and MyTeam ~= 0 then
-											IndicatorColor = Color( 255, 0, 0, Alpha )
-										else
-											IndicatorColor = Color( 0, 127, 255, Alpha )
-										end
-									end
-								end
+					local Alpha = 255 * (1 - (Dist / 10000) ^ 2)
+					local Team = v:GetAITEAM()
+					local IndicatorColor = Color( 255, 0, 0, Alpha )
 
-								ent:LFSHudPaintPlaneIdentifier( Pos.x, Pos.y, IndicatorColor, v )
+					if Team == 0 then
+						IndicatorColor = Color( 0, 255, 0, Alpha )
+					else
+						if Team == 1 or Team == 2 then
+							if Team ~= MyTeam and MyTeam ~= 0 then
+								IndicatorColor = Color( 255, 0, 0, Alpha )
+							else
+								IndicatorColor = Color( 0, 127, 255, Alpha )
 							end
 						end
 					end
+
+					ent:LFSHudPaintPlaneIdentifier( Pos.x, Pos.y, IndicatorColor, v )
 				end
 			end
 		end
