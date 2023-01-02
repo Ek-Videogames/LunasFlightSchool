@@ -1696,18 +1696,18 @@ function ENT:AIGetTarget()
 	self.FoundPlanes = simfphys.LFS:PlanesGetAll()
 	
 	for _, v in pairs( self.FoundPlanes ) do
-		if IsValid( v ) and v ~= self and v.LFS then
-			local Dist = (v:GetPos() - MyPos):Length()
-			
-			if Dist < TargetDistance and self:AITargetInfront( v, 100 ) then
-				if not v:IsDestroyed() and v.GetAITEAM then
-					local HisTeam = v:GetAITEAM()
-					if HisTeam ~= 0 then
-						if HisTeam ~= self:GetAITEAM() or HisTeam == 3 then
-							if self:CanSee( v ) then
-								ClosestTarget = v
-								TargetDistance = Dist
-							end
+		if not IsValid( v ) and v == self then continue end
+
+		local Dist = (v:GetPos() - MyPos):Length()
+
+		if Dist < TargetDistance and self:AITargetInfront( v, 100 ) then
+			if not v:IsDestroyed() and v.GetAITEAM then
+				local HisTeam = v:GetAITEAM()
+				if HisTeam ~= 0 then
+					if HisTeam ~= self:GetAITEAM() or HisTeam == 3 then
+						if self:CanSee( v ) then
+							ClosestTarget = v
+							TargetDistance = Dist
 						end
 					end
 				end
