@@ -88,6 +88,149 @@ function simfphys.LFS.CheckUpdates()
 			end
 		end
 	end)
+
+	if SERVER then return end
+
+	if not file.Exists( "lfs_lvs_dontnotifyme.txt", "DATA" ) then
+
+		local bgMat = Material( "lfs_controlpanel_bg.png" )
+
+		local InfoFrame = vgui.Create( "DFrame" )
+		InfoFrame:SetSize( 420, 340 )
+		InfoFrame:SetTitle( "" )
+		InfoFrame:SetDraggable( true )
+		InfoFrame:MakePopup()
+		InfoFrame:Center()
+		InfoFrame.Paint = function(self, w, h )
+			draw.RoundedBox( 8, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+			draw.RoundedBox( 8, 1, 46, w-2, h-47, Color( 0, 0, 0, 255 ) )
+
+			draw.RoundedBox( 4, 1, 26, w-2, 36, Color( 0, 0, 0, 255 ) )
+
+			draw.RoundedBox( 8, 0, 0, w, 25, Color( 127, 0, 0, 255 ) )
+			draw.SimpleText( "[LFS] - Notification", "LFS_FONT", 5, 11, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+			draw.DrawText( "!!!!PLEASE READ!!!!", "LFS_FONT", 10, 30, Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+		end
+
+		local richtext = vgui.Create( "RichText", InfoFrame )
+		richtext:SetPos( 5, 65 )
+		richtext:SetSize( 410, 200 )
+
+		richtext:InsertColorChange(0, 127, 255, 255)
+		richtext:AppendText("[LFS]")
+		richtext:InsertColorChange(255, 255, 255, 255)
+		richtext:AppendText(" is slowly being replaced by ")
+		richtext:InsertColorChange(150, 150, 150, 255)
+		richtext:AppendText("[LVS]")
+		richtext:InsertColorChange(255, 255, 255, 255)
+		richtext:AppendText(". For that reason \n")
+		richtext:InsertColorChange(255, 0, 0, 255)
+		richtext:AppendText("LFS - Planes WILL NO LONGER CONTAIN ANY CONTENT")
+		richtext:InsertColorChange(255, 255, 255, 255)
+		richtext:AppendText(" and has been renamed to ")
+		richtext:InsertColorChange(0, 127, 255, 255)
+		richtext:AppendText("LFS - Legacy")
+		richtext:InsertColorChange(255, 255, 255, 255)
+		richtext:AppendText(".")
+		richtext:InsertColorChange(0, 127, 255, 255)
+		richtext:AppendText(" [LFS]")
+		richtext:InsertColorChange(255, 255, 255, 255)
+		richtext:AppendText(" now only exists to keep backwards compatibility with third-party community vehicles.\n")
+		richtext:AppendText("The Control Panel can still be opened using ")
+		richtext:InsertColorChange(0,127,255,255)
+		richtext:AppendText("lfs_openmenu ")
+		richtext:InsertColorChange(255,255,255,255)
+		richtext:AppendText("Console Command.\n\n")
+		richtext:AppendText("Please Consider Switching over to ")
+		richtext:InsertColorChange(150, 150, 150, 255)
+		richtext:AppendText("[LVS]")
+		richtext:InsertColorChange(255,255,255,255)
+		richtext:AppendText(", as it is a more superior vehicle framework. It will fix alot of problems that have plagued both LFS and Simfphys ever since their release. Please note that LVS has full LFS compatibility, meaning")
+		richtext:InsertColorChange(0,255,0,255)
+		richtext:AppendText(" LFS AND LVS CAN AND SHOULD BE USED TOGETHER\n")
+		richtext:InsertColorChange(255,255,255,255)
+		richtext:AppendText("(LVS Vehicle-Spawner supports LFS, LVS-AI detects LFS, ect)\n")
+		richtext:InsertColorChange(255,255,255,255)
+		richtext:AppendText("The plan is to port all my packs (including star wars, simfphys, simfphys-armed) over to LVS. Sadly, i couldn't find a good way to automatically port old vehicles to the new system without breaking them or making them turn into garbage. Sorry, and thank you in advance. - Luna")
+
+		local DermaButton = vgui.Create( "DButton", InfoFrame )
+		DermaButton:SetText( "" )
+		DermaButton:SetPos( 5, 275 )
+		DermaButton:SetSize( 410, 20 )
+		DermaButton.DoClick = function() steamworks.ViewFile( "1878568737" ) end
+		DermaButton.Paint = function(self, w, h ) 
+			local CCC = self:IsHovered() and color_white or Color( 150, 150, 150, 255 )
+			draw.DrawText( "CLICK HERE TO GET LVS-PLANES", "LFS_FONT", w * 0.5, 0, CCC, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP )
+		end
+
+		local CheckBox = vgui.Create( "DCheckBoxLabel", InfoFrame )
+		CheckBox:SetText( "OK, don't show me this message ever again." )
+		CheckBox:SizeToContents()
+		CheckBox:SetPos( 10, 315 )
+		CheckBox.OnChange = function(self, bVal)
+			if bVal then
+				surface.PlaySound( "buttons/button14.wav" )
+				file.Write( "lfs_lvs_dontnotifyme.txt", "[LVS] - Notification suppressing file." )
+			else
+				surface.PlaySound( "buttons/button10.wav" )
+				file.Delete( "lfs_lvs_dontnotifyme.txt" )
+			end
+		end
+	end
+
+	if not LFS_1878568737 then
+		if file.Exists( "lfs_dontnotifyme.txt", "DATA" ) then return end
+
+		local bgMat = Material( "lfs_controlpanel_bg.png" )
+
+		local InfoFrame = vgui.Create( "DFrame" )
+		InfoFrame:SetSize( 345, 120 )
+		InfoFrame:SetTitle( "" )
+		InfoFrame:SetDraggable( true )
+		InfoFrame:MakePopup()
+		InfoFrame:Center()
+		InfoFrame.Paint = function(self, w, h )
+			draw.RoundedBox( 8, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+			draw.RoundedBox( 8, 1, 46, w-2, h-47, Color( 120, 120, 120, 255 ) )
+
+			draw.RoundedBox( 4, 1, 26, w-2, 36, Color( 120, 120, 120, 255 ) )
+
+			draw.RoundedBox( 8, 0, 0, w, 25, Color( 127, 0, 0, 255 ) )
+			draw.SimpleText( "[LFS] - Notification", "LFS_FONT", 5, 11, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+			surface.SetDrawColor( 255, 255, 255, 50 )
+			surface.SetMaterial( bgMat )
+			surface.DrawTexturedRect( 0, -50, w, w )
+
+			draw.DrawText( "Due to ongoing complaints about filesize,", "LFS_FONT_PANEL", 10, 30, Color( 255, 170, 170, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+			draw.DrawText( "STAR WARS vehicles are NO LONGER PART OF THE BASE ADDON!", "LFS_FONT_PANEL", 10, 45, Color( 255, 170, 170, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+			draw.DrawText( "If you still want to use them", "LFS_FONT_PANEL", 10, 67, Color( 255, 170, 170, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+		end
+
+		local DermaButton = vgui.Create( "DButton", InfoFrame )
+		DermaButton:SetText( "" )
+		DermaButton:SetPos( 150, 63 )
+		DermaButton:SetSize( 150, 20 )
+		DermaButton.DoClick = function() steamworks.ViewFile( "1878568737" ) end
+		DermaButton.Paint = function(self, w, h ) 
+			draw.DrawText( "CLICK HERE", "LFS_FONT", 0, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+		end
+
+		local CheckBox = vgui.Create( "DCheckBoxLabel", InfoFrame )
+		CheckBox:SetText( "OK, don't show me this message ever again." )
+		CheckBox:SizeToContents()
+		CheckBox:SetPos( 10, 95 )
+		CheckBox.OnChange = function(self, bVal)
+			if bVal then
+				surface.PlaySound( "buttons/button14.wav" )
+				file.Write( "lfs_dontnotifyme.txt", "[LFS] - Star Wars Pack Notification suppressing file." )
+			else
+				surface.PlaySound( "buttons/button10.wav" )
+				file.Delete( "lfs_dontnotifyme.txt" )
+			end
+		end
+	end
 end
 
 function simfphys.LFS.GetVersion()
