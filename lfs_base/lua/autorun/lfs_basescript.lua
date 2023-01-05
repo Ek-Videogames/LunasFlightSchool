@@ -91,7 +91,7 @@ function simfphys.LFS.CheckUpdates()
 
 	if SERVER then return end
 
-	if not file.Exists( "lfs_lvs_dontnotifyme.txt", "DATA" ) then
+	if not LVS and not file.Exists( "lfs_lvs_dontnotifyme.txt", "DATA" ) then
 
 		local bgMat = Material( "lfs_controlpanel_bg.png" )
 
@@ -158,7 +158,7 @@ function simfphys.LFS.CheckUpdates()
 		DermaButton:SetText( "" )
 		DermaButton:SetPos( 5, 275 )
 		DermaButton:SetSize( 410, 20 )
-		DermaButton.DoClick = function() steamworks.ViewFile( "1878568737" ) end
+		DermaButton.DoClick = function() steamworks.ViewFile( "2912826012" ) end
 		DermaButton.Paint = function(self, w, h ) 
 			local CCC = self:IsHovered() and color_white or Color( 150, 150, 150, 255 )
 			draw.DrawText( "CLICK HERE TO GET LVS-PLANES", "LFS_FONT", w * 0.5, 0, CCC, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP )
@@ -179,8 +179,7 @@ function simfphys.LFS.CheckUpdates()
 		end
 	end
 
-	if not LFS_1878568737 then
-		if file.Exists( "lfs_dontnotifyme.txt", "DATA" ) then return end
+	if not LFS_1878568737 and not file.Exists( "lfs_dontnotifyme.txt", "DATA" ) then
 
 		local bgMat = Material( "lfs_controlpanel_bg.png" )
 
